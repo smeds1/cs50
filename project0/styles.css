@@ -1,0 +1,33 @@
+table {
+  border: 2px solid black;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid black;
+}
+
+#royals {
+  background-color: #174885;
+  color: #C09A5B;
+}
+
+#whitesox {
+  background-color: black;
+  color: white;
+}
+
+#indians {
+  background-color: #E31937;
+  color: #002B5C;
+}
+
+#tigers {
+  background-color: #182D55;
+  color: #F26722;
+}
+
+#twins {
+  background-color: #002B5C;
+  color: #D31145;
+}
