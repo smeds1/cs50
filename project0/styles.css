@@ -5,6 +5,12 @@ table {
 
 th, td {
   border: 1px solid black;
+  padding: 2px;
+  text-align: center;
+}
+
+.awards {
+  background-color: lightblue;
 }
 
 #royals {
@@ -30,4 +36,16 @@ th, td {
 #twins {
   background-color: #002B5C;
   color: #D31145;
+}
+
+@media (min-width: 500px) {
+  .hide-on-small {
+    visibility: visible;
+  }
+}
+
+@media (max-width: 499px) {
+  .hide-on-small {
+    visibility: hidden;
+  }
 }
