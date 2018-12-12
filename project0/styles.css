@@ -1,31 +1,21 @@
-table {
+#whitesox, #twins, #tigers, #royals, #indians {
   border: 2px solid black;
   border-collapse: collapse;
 }
-
-th, td {
+#whitesox th, #twins th, #tigers th, #royals th, #indians th, #whitesox td, #twins td, #tigers td, #royals td, #indians td {
   border: 1px solid black;
   padding: 2px;
   text-align: center;
 }
 
-.awards {
-  background-color: lightblue;
+#indians {
+  background-color: #E31937;
+  color: #002B5C;
 }
 
 #royals {
   background-color: #174885;
   color: #C09A5B;
-}
-
-#whitesox {
-  background-color: black;
-  color: white;
-}
-
-#indians {
-  background-color: #E31937;
-  color: #002B5C;
 }
 
 #tigers {
@@ -38,14 +28,34 @@ th, td {
   color: #D31145;
 }
 
+#whitesox {
+  background-color: black;
+  color: white;
+}
+
+.awards {
+  background-color: lightblue;
+  list-style-type: square;
+}
+
+table {
+  border: 1px solid black;
+}
+table th, table td {
+  border: 1px solid black;
+  padding: 1px;
+  text-align: center;
+}
+
 @media (min-width: 500px) {
   .hide-on-small {
     visibility: visible;
   }
 }
-
 @media (max-width: 499px) {
   .hide-on-small {
     visibility: hidden;
   }
 }
+
+/*# sourceMappingURL=styles.css.map */

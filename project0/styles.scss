@@ -1,0 +1,74 @@
+$indians-color-1: #E31937;
+$indians-color-2: #002B5C;
+$royals-color-1: #174885;
+$royals-color-2: #C09A5B;
+$tigers-color-1: #182D55;
+$tigers-color-2: #F26722;
+$twins-color-1: #002B5C;
+$twins-color-2: #D31145;
+$whitesox-color-1: black;
+$whitesox-color-2: white;
+
+%team-history-table {
+  border: 2px solid black;
+  border-collapse: collapse;
+
+  th, td {
+    border: 1px solid black;
+    padding: 2px;
+    text-align: center;
+  }
+}
+
+#indians {
+  @extend %team-history-table;
+  background-color: $indians-color-1;
+  color: $indians-color-2;
+}
+#royals {
+  @extend %team-history-table;
+  background-color: $royals-color-1;
+  color: $royals-color-2;
+}
+#tigers {
+  @extend %team-history-table;
+  background-color: $tigers-color-1;
+  color: $tigers-color-2;
+}
+#twins {
+  @extend %team-history-table;
+  background-color: $twins-color-1;
+  color: $twins-color-2;
+}
+#whitesox {
+  @extend %team-history-table;
+  background-color: $whitesox-color-1;
+  color: $whitesox-color-2;
+}
+
+.awards {
+  background-color: lightblue;
+  list-style-type: square;
+}
+
+table {
+  border: 1px solid black;
+
+  th, td {
+    border: 1px solid black;
+    padding: 1px;
+    text-align: center;
+  }
+}
+
+@media (min-width: 500px) {
+  .hide-on-small {
+    visibility: visible;
+  }
+}
+
+@media (max-width: 499px) {
+  .hide-on-small {
+    visibility: hidden;
+  }
+}
