@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+
+{% block title %}
+{{ book.title }}
+{% endblock %}
+
+{% block body %}
+  <div class="row">
+    <div class="col-sm">
+      <table class="table-bordered">
+          <tr><th>Title</th><td>{{book.title}}</td></tr>
+          <tr><th>Author</th><td>{{book.name}}</td></tr>
+          <tr><th>Year Published</th><td>{{book.year}}</td></tr>
+          <tr><th>ISBN</th><td>{{book.isbn}}</td></tr>
+          {% if gr %}
+            <tr><th>Goodreads Ratings Count</th><td>{{gr.books[0].ratings_count}}</td></tr>
+            <tr><th>Goodreads Average</th><td>{{gr.books[0].average_rating}}</td></tr>
+          {% endif %}
+      </table>
+    </div>
+    <div class="col-sm">
+      <form action="{{ url_for('book_detail', book_id=book.id) }}" method="post">
+        <div class="form-group">
+          <select class="form-control" name="stars">
+            <option value="" disabled selected>Stars</option>
+            <option value="5">5</option>
+            <option value="4">4</option>
+            <option value="3">3</option>
+            <option value="2">2</option>
+            <option value="1">1</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <textarea rows="4" cols="100%" name="review" placeholder="Review"></textarea>
+        </div>
+        <button class="btn btn-primary" type="submit">Submit Review</button>
+      </form>
+    </div>
+  </div>
+  {% if reviews %}
+  <div class="row">
+    <table class="table">
+      <thead>
+      <tr><th>Stars</th><th>Review</th></tr>
+      </thead>
+      <tbody>
+      {% for review in reviews %}
+        <tr><td>{{review.stars}}</td><td>{{review.review}}</tr></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+{% endblock %}

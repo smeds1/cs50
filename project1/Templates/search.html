@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Search
+{% endblock %}
+
+{% block body %}
+  <form action="/search" method="post">
+    <div class="form-group">
+      <input autocomplete="off" autofocus class="form-control" name="book" placeholder="Book" type="text"/>
+    </div>
+    <button class="btn btn-primary" type="submit">Search</button>
+  </form>
+  {% if matches %}
+    {% if matches == "No Matches" %}
+      <p>No Matches</p>
+    {% else %}
+      <table class="table">
+        <thead><tr><th>Title</th><th>Author</th><th>Year</th><th>ISBN</th></tr></thead>
+        <tbody>
+        {% for match in matches %}
+          <tr><td><a href="{{ url_for('book_detail', book_id=match.id) }}">{{match.title}}</a></td>
+            <td> {{match.name}} </td>
+            <td>{{match.year}}</td><td> {{match.isbn}} </td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      {% endif %}
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Books
+{% endblock %}
+
+{% block body %}
+  <table>
+    <thead>
+      <tr><th>Title</th><th>Author</th><th>Year</th></tr>
+    </thead>
+    {% for book in books %}
+      <tr><td><a href="{{ url_for('book_detail', book_id=book.id) }}">{{book.title}}</a></td>
+      <td>{{book.name}}</td>
+      <td>{{book.year}}</td></tr>
+    {% endfor %}
+  </table>
+{% endblock %}
