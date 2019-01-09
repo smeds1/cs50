@@ -2,7 +2,7 @@
 
 This project contains information on the American League Central division
 baseball teams. Each individual team page includes the number of Championships
-won, MVP award winners, and Cy Young award winner. The project includes the
+won, MVP award winners, and Cy Young award winners. The project includes the
 following files:
 
 * [index.html](https://smeds1.github.io/cs50/project0/) (main page with last season's final standings)
@@ -14,3 +14,4 @@ following files:
 * styles.scss (scss styling file for the project)
 * styles.css (css file derived from the scss file)
 * styles.css.map (mapping file between styles.scss and styles.css)
+* baseball.jpg (image of baseball for main page)

@@ -1,22 +1,47 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-  if (localStorage.getItem("display_name")) {
-    document.querySelector('body').innerHTML = localStorage.getItem('display_name');
-  }
-  else {
-    const form = document.createElement('form');
-    const name = document.createElement('input');
-    name.type = "text";
-    name.id = "name";
-    name.autocomplete="off";
-    name.autofocus=true;
-    name.placeholder="Enter Display Name";
-    form.append(name);
-    const submit = document.createElement('input');
-    submit.type = "submit";
-    submit.id = "submit";
-    form.append(submit);
-    document.querySelector('body').append(form);
-  }
+  document.querySelectorAll('a').forEach(a => {
+          a.onclick = () => {
+              document.querySelector('#chatentry').disabled = false;
+              document.querySelector('#channel_name').innerHTML = `Channel: ${a.innerHTML}`;
+          };
+      });
+
+    document.querySelector('#new_channel').onsubmit = () => {
+
+        // Initialize new request
+        const request = new XMLHttpRequest();
+        const channel = document.querySelector('#channel').value;
+        request.open('POST', '/new_channel');
+
+        // Callback function for when request completes
+        request.onload = () => {
+
+            // Extract JSON data from request
+            const data = JSON.parse(request.responseText);
+
+            // Update the result div
+            if (data.success) {
+                document.querySelector('#error').innerHTML = '';
+                const link = document.createElement('a');
+                const li = document.createElement('li');
+                link.href = '#';
+                link.innerHTML =  `${data.channel}`;
+                li.appendChild(link);
+                document.querySelector('#channels').append(li);
+            }
+            else {
+                document.querySelector('#error').innerHTML = 'That channel already exists.';
+            }
+        }
+
+        // Add data to send with request
+        const data = new FormData();
+        data.append('channel', channel);
+
+        // Send request
+        request.send(data);
+        return false;
+    };
 
 });
