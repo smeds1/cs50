@@ -7,36 +7,41 @@
         <title>Flack</title>
     </head>
     <body>
-      <div class="container">
-        {% if user %}
-          <div class="row">
-            <div class="col-sm">
-              <h3>Hello, {{ user }}</h3>
+      <div class="container" id="new_user">
+        <div class="row">
+          <div class="col-sm">
+            <h3>Welcome to Flack</h3>
+            Enter User Name: <input type="text" placeholder='your username' id="uname"><br>
+            <button id="sign_up">Sign up!</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="container" id="old_user">
+        <div class="row">
+          <div class="col-sm">
+            <h3 id="welcome_user"></h3>
+            <div id = "available_channels">
               <h6>Available Channels</h6>
               <ul id="channels">
                 {% for channel in channels %}
                 <li><a href='#'>{{channel}}</a></li>
                 {% endfor %}
               </ul>
-              <h6>Create a new Channel</h6>
-              <form id="new_channel">
-                <input id="channel" autocomplete="off" autofocus placeholder="New Channel" type="text">
-                <input type="submit" value="Create New Channel">
-              </form>
-              <div id="error"></div>
             </div>
-            <div class="col-sm" id="right_div">
-              <div id="previous_chat_area"><ul id="previous_chats"></ul></div>
-              <h6 id="channel_name" visiblity="hidden"></h6>
-              <textarea id="chatentry" rows="5", cols="30", placeholder="chat", disabled></textarea>
-            </div>
+            <h6>Create a new Channel</h6>
+            <form id="new_channel">
+              <input id="channel" autocomplete="off" autofocus placeholder="New Channel" type="text">
+              <input type="submit" value="Create New Channel">
+            </form>
+            <div id="error"></div>
           </div>
-        {% else %}
-          <form action="/" method="post" id="new_user">
-            <input name="uname" autocomplete="off" autofocus placeholder="User Name" type="text">
-            <input id="submit" type="submit">
-          </form>
-        {% endif %}
+          <div class="col-sm">
+            <div id="previous_chat_area"><ul id="previous_chats"></ul></div>
+            <h6 id="channel_name" visiblity="hidden"></h6>
+            <textarea id="chatentry" rows="5", cols="30", placeholder="chat", disabled></textarea>
+          </div>
+        </div>
       </div>
     </body>
 </html>
