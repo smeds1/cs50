@@ -36,12 +36,12 @@ def enter_chat(data):
     channel = data["channel"]
     user = data["user"]
     timestamp = datetime.datetime.now()
-    full_chat = "<b>{}</b> <i>({}/{}/{} -{}:{})</i> {}".format(user,
-        int(timestamp.month),
-        int(timestamp.day),
-        timestamp.year,
+    full_chat = "<b>{}</b> <i>({}/{}/{} - {}:{})</i> {}".format(user,
+        timestamp.month,
+        timestamp.day,
+        timestamp.year-2000,
         timestamp.hour,
-        timestamp.minute,
+        timestamp.minute if timestamp.minute >= 10 else '0'+str(timestamp.minute),
         text)
     if len(chats[channel]) < 100:
         chats[channel].append(full_chat)

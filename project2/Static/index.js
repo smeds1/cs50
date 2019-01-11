@@ -25,34 +25,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
   socket.on('connect', () => {
 
+    if (localStorage.getItem('channel')){
+      const channel = localStorage.getItem('channel')
+      document.querySelector('#channel_name').innerHTML = channel;
+      document.querySelector('#chatentry').disabled = false;
+      socket.emit('pick channel', {'channel': channel});
+    }
+        pick_channel(socket);
         //make channel names clickable
-        document.querySelectorAll('a').forEach(a => {
-            a.onclick = () => {
-              const channel = a.innerHTML;
-              document.querySelector('#chatentry').disabled = false;
-              document.querySelector('#channel_name').innerHTML = channel;
-              previous_chats = document.querySelector('#previous_chats');
-              while (previous_chats.firstChild) {
-                  previous_chats.removeChild(previous_chats.firstChild);
-              }
-              socket.emit('pick channel', {'channel': channel});
-            }
-        });
 
-        //update chat history when chat is entered
-        document.querySelector('#chatentry').onblur = () => {
-            const text = document.querySelector('#chatentry').value;
-            const channel = document.querySelector('#channel_name').innerHTML;
-            socket.emit('enter chat', {'text': text, 'channel': channel, 'user': localStorage.getItem('user')});
-        };
+
+        window.onkeydown = (event) => {
+          if(event.keyCode==13){
+              const text = document.querySelector('#chatentry').value;
+              const channel = document.querySelector('#channel_name').innerHTML;
+              document.querySelector('#chatentry').value = "";
+              socket.emit('enter chat', {'text': text, 'channel': channel, 'user': localStorage.getItem('user')});
+              return false;
+            }
+          }
+
     });
 
     // display all previous chats on the selected channel
     socket.on('display_previous_chats', chats => {
+        previous_chats = document.querySelector('#previous_chats')
           chats.forEach(c => {
             const li = document.createElement('li');
             li.innerHTML = `${c}`;
-            document.querySelector('#previous_chats').append(li);
+            previous_chats.append(li);
           })
     });
 
@@ -60,7 +61,10 @@ document.addEventListener('DOMContentLoaded', () => {
     socket.on('update_chat', data => {
         const li = document.createElement('li');
         li.innerHTML = `${data.chat}`;
-        document.querySelector('#previous_chats').append(li);
+        previous_chats = document.querySelector('#previous_chats')
+        previous_chats.append(li);
+        //previous_chats.setAttribute("display","flex");
+        //previous_chats.setAttribute("flex-direction","column-reverse");
     });
 
     // Create a new channel
@@ -91,6 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   while (previous_chats.firstChild) {
                       previous_chats.removeChild(previous_chats.firstChild);
                   }
+                  localStorage.setItem('channel', channel);
                   socket.emit('pick channel', {'channel': channel});
                 }
                 li.appendChild(link);
@@ -112,3 +117,19 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
 });
+
+function pick_channel(socket){
+  document.querySelectorAll('a').forEach(a => {
+      a.onclick = () => {
+        const channel = a.innerHTML;
+        document.querySelector('#chatentry').disabled = false;
+        document.querySelector('#channel_name').innerHTML = channel;
+        previous_chats = document.querySelector('#previous_chats');
+        while (previous_chats.firstChild) {
+            previous_chats.removeChild(previous_chats.firstChild);
+        }
+        localStorage.setItem('channel', channel);
+        socket.emit('pick channel', {'channel': channel});
+      }
+  });
+}

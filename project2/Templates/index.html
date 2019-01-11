@@ -2,6 +2,7 @@
 <html>
     <head>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
         <script src="{{ url_for('static', filename='index.js') }}"></script>
         <title>Flack</title>
@@ -29,6 +30,7 @@
                 {% endfor %}
               </ul>
             </div>
+            <hr>
             <h6>Create a new Channel</h6>
             <form id="new_channel">
               <input id="channel" autocomplete="off" autofocus placeholder="New Channel" type="text">
@@ -36,9 +38,9 @@
             </form>
             <div id="error"></div>
           </div>
-          <div class="col-sm">
-            <div id="previous_chat_area"><ul id="previous_chats"></ul></div>
+          <div class="col-sm" id="chat_col">
             <h6 id="channel_name" visiblity="hidden"></h6>
+            <div id="previous_chat_area"><ul id="previous_chats"></ul></div>
             <textarea id="chatentry" rows="5", cols="30", placeholder="chat", disabled></textarea>
           </div>
         </div>

@@ -1,0 +1,17 @@
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+#previous_chat_area {
+  color: blue;
+  overflow-y: auto;
+  height: 200px;
+  outline: 2px solid blue;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+#chat_entry {
+  outline: 1px solid black;
+}
