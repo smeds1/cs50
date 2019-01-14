@@ -11,7 +11,3 @@ ul {
   display: flex;
   flex-direction: column-reverse;
 }
-
-#chat_entry {
-  outline: 1px solid black;
-}

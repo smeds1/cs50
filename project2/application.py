@@ -15,20 +15,19 @@ chats = {}
 def index():
     return render_template("index.html",channels=channels)
 
-@app.route("/new_channel", methods=["POST"])
-def new_channel():
-    channel = request.form.get("channel")
-    if channel in channels:
-        return jsonify({"success": False})
-    else:
+@socketio.on("new channel")
+def new_channel(data):
+    channel = data["channel"]
+    if not channel in channels:
         channels.append(channel)
         chats[channel] = []
-        return jsonify({"success": True, "channel": channel})
+        emit("display_new_channel", channel, broadcast=True)
 
-@socketio.on("pick channel")
-def pick_channel(data):
-    channel = data["channel"]
-    emit("display_previous_chats", chats[channel], broadcast=True)
+@app.route("/pick_channel", methods=["POST"])
+def pick_channel():
+    channel = request.form.get("channel")
+    if channel in channels:
+        return jsonify({'chats':chats[channel]})
 
 @socketio.on("enter chat")
 def enter_chat(data):
@@ -48,4 +47,4 @@ def enter_chat(data):
     else:
         chats[channel] = chats[channel][1:] + [full_chat]
 
-    emit("update_chat", {'chat':full_chat}, broadcast=True)
+    emit("update_chat", {'text':full_chat, 'channel':channel}, broadcast=True)
