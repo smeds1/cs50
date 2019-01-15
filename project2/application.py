@@ -48,3 +48,11 @@ def enter_chat(data):
         chats[channel] = chats[channel][1:] + [full_chat]
 
     emit("update_chat", {'text':full_chat, 'channel':channel}, broadcast=True)
+
+@app.route("/delete_chat", methods=["POST"])
+def delete_channel():
+    channel = request.form.get("channel")
+    chat = request.form.get("chat")
+    if chat in chats[channel]:
+        chats[channel].remove(chat)
+        return jsonify({'success':'true'})

@@ -11,3 +11,12 @@ ul {
   display: flex;
   flex-direction: column-reverse;
 }
+
+.delete {
+  padding-left: 1px;
+  padding-right: 1px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  color: red;
+  font-size: 8px;
+}

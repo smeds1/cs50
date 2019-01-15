@@ -3,10 +3,10 @@ document.addEventListener('DOMContentLoaded', () => {
   var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
   socket.on('connect', () => {
-    display_saved_info(socket);
+    display_saved_info();
     listen_for_chat_submission(socket);
     document.querySelectorAll('.channel_link').forEach(link => {
-      link.onclick = () => {make_channel_clickable(link,socket)};
+      link.onclick = () => {load_channel(link.innerHTML)};
     });
     document.querySelector('#new_channel').onsubmit = () => {
       const channel = document.querySelector('#channel').value;
@@ -15,14 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   socket.on('update_chat', data => {
-    if(data['channel'] == document.querySelector('#channel_name').innerHTML){
-      const li = document.createElement('li');
-      li.innerHTML = data['text'];
-      previous_chats = document.querySelector('#previous_chats');
-      previous_chats.append(li);
+    if(data['channel'] == document.getElementById('channel_name').innerHTML){
+      display_chat(data["text"],data["channel"])
+      previous_chats_area = document.getElementById('previous_chat_area');
+      previous_chats_area.scrollTop = previous_chats_area.scrollHeight - 200;
     }
-    //previous_chats.setAttribute("display","flex");
-    //previous_chats.setAttribute("flex-direction","column-reverse");
   });
 
   socket.on('display_new_channel', channel => {
@@ -31,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     link.href = '#';
     link.class = 'channel_link';
     link.innerHTML =  channel;
-    link.onclick = () => {make_channel_clickable(link,socket)};
+    link.onclick = () => {load_channel(channel)};
     li.appendChild(link);
     document.querySelector('#channels').append(li);
     document.querySelector('#channel').value = '';
@@ -40,14 +37,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 //if username is saved in local storage, welcome user and display channels
 //if previous channel is saved in local storage, display channel and previous chats
-function display_saved_info(socket){
+function display_saved_info(){
 
   const user = localStorage.getItem('user');
   if (!user){
-    document.querySelector('#new_user').style.display = 'block';
-    document.querySelector('#old_user').style.display = 'none';
-    document.querySelector('#sign_up').onclick = () => {
-      const uname = document.querySelector('#uname').value;
+    document.getElementById('new_user').style.display = 'block';
+    document.getElementById('old_user').style.display = 'none';
+    document.getElementById('sign_up').onclick = () => {
+      const uname = document.getElementById('uname').value;
       if (uname){
         localStorage.setItem('user', uname);
         welcome_user(uname);
@@ -58,28 +55,25 @@ function display_saved_info(socket){
     welcome_user(user);
     const channel = localStorage.getItem('channel');
     if (channel){
-      document.querySelector('#channel_name').innerHTML = channel;
-      document.querySelector('#chatentry').disabled = false;
-      socket.emit('pick channel', {'channel': channel});
+      load_channel(channel);
     }
   }
 }
 
 //Welcome the user in the heading and display the available channels
 function welcome_user(user){
-  document.querySelector('#welcome_user').innerHTML = `Welcome, ${user}`;
-  document.querySelector('#old_user').style.display = 'block';
-  document.querySelector('#new_user').style.display = 'none';
+  document.getElementById('welcome_user').innerHTML = `Welcome, ${user}`;
+  document.getElementById('old_user').style.display = 'block';
+  document.getElementById('new_user').style.display = 'none';
 }
 
 //Make a channel so that the user can click on the name and load the
 //previous chats made in that channel. The channel name should also be saved
 //in local storage.
-function make_channel_clickable(link,socket){
-  const channel = link.innerHTML;
-  document.querySelector('#chatentry').disabled = false;
-  document.querySelector('#channel_name').innerHTML = channel;
-  previous_chats = document.querySelector('#previous_chats');
+function load_channel(channel){
+  document.getElementById('chatentry').disabled = false;
+  document.getElementById('channel_name').innerHTML = channel;
+  previous_chats = document.getElementById('previous_chats');
   while (previous_chats.firstChild) { //remove anything in previous chats window
     previous_chats.removeChild(previous_chats.firstChild);
   }
@@ -89,13 +83,8 @@ function make_channel_clickable(link,socket){
   request.open('POST', '/pick_channel');
   request.onload = () => {
     const data = JSON.parse(request.responseText);
-    data["chats"].forEach(c => {
-      const li = document.createElement('li');
-      li.innerHTML = c;
-      const del = document.createElement('button');
-      del.innerHTML = 'X';
-      li.append(del);
-      previous_chats.append(li);
+    data["chats"].forEach(chat => {
+      display_chat(chat,channel);
     })
   }
   const data = new FormData();
@@ -104,14 +93,46 @@ function make_channel_clickable(link,socket){
   return false;
 }
 
+function display_chat(chat,channel){
+  const li = document.createElement('li');
+  li.innerHTML = chat+' ';
+  const user = localStorage.getItem('user');
+  console.log(chat.substring(3,3+user.length));
+  if (chat.substring(3,3+user.length) === user){
+    const del = document.createElement('button');
+    del.innerHTML = 'X';
+    del.className = 'delete';
+
+    del.onclick = () => {
+      const request = new XMLHttpRequest();
+      request.open('POST', '/delete_chat');
+      request.onload = () => {
+        const data = JSON.parse(request.responseText);
+        if (data["success"]){
+          previous_chats.removeChild(li);
+        }
+      };
+      const data = new FormData();
+      data.append('channel', channel);
+      data.append('chat', chat);
+      request.send(data);
+      return false;
+    };
+
+    li.append(del);
+  }
+  previous_chats = document.getElementById('previous_chats');
+  previous_chats.append(li);
+}
+
 //Submit chat whenever enter key is pressed
 function listen_for_chat_submission(socket){
   window.onkeydown = (event) => {
     if(event.keyCode==13){
-      const text = document.querySelector('#chatentry').value;
-      const channel = document.querySelector('#channel_name').innerHTML;
+      const text = document.getElementById('chatentry').value;
+      const channel = document.getElementById('channel_name').innerHTML;
       socket.emit('enter chat', {'text': text, 'channel': channel, 'user': localStorage.getItem('user')});
-      document.querySelector('#chatentry').value = "";
+      document.getElementById('chatentry').value = "";
       return false;
     }
   }
