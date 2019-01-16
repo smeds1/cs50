@@ -97,7 +97,6 @@ function display_chat(chat,channel){
   const li = document.createElement('li');
   li.innerHTML = chat+' ';
   const user = localStorage.getItem('user');
-  console.log(chat.substring(3,3+user.length));
   if (chat.substring(3,3+user.length) === user){
     const del = document.createElement('button');
     del.innerHTML = 'X';
